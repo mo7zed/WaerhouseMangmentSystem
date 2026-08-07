@@ -1,0 +1,387 @@
+/* PrimeNG — Tachyon light theme + responsive control sizing */
+.p-component {
+  font-family: var(--font-sans) !important;
+  font-size: var(--text-base) !important;
+}
+
+body[dir='rtl'] .p-component {
+  font-family: var(--font-arabic) !important;
+}
+
+/* ─── Buttons ─── */
+.p-button {
+  border-radius: var(--control-radius) !important;
+  font-weight: 600 !important;
+  font-size: var(--control-font) !important;
+  min-height: var(--control-height) !important;
+  padding: 0.5rem var(--control-padding-x) !important;
+  gap: var(--control-gap) !important;
+  max-width: 100%;
+  justify-content: center;
+  line-height: 1.2 !important;
+}
+
+.p-button .p-button-icon {
+  font-size: 0.95em !important;
+}
+
+.p-button .p-button-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+}
+
+.p-button.p-button-sm {
+  min-height: var(--control-height-sm) !important;
+  padding: 0.375rem var(--control-padding-x-sm) !important;
+  font-size: var(--control-font-sm) !important;
+}
+
+.p-button.p-button-lg {
+  min-height: var(--control-height-lg) !important;
+  padding: 0.625rem var(--control-padding-x-lg) !important;
+  font-size: var(--control-font-lg) !important;
+}
+
+.p-button.p-button-icon-only {
+  width: var(--control-height) !important;
+  min-width: var(--control-height) !important;
+  padding: 0 !important;
+}
+
+.p-button.p-button-icon-only.p-button-sm {
+  width: var(--control-height-sm) !important;
+  min-width: var(--control-height-sm) !important;
+}
+
+.p-button:not(.p-button-outlined):not(.p-button-text):not(.p-button-danger):not(.p-button-success):not(.p-button-warning):not(.p-button-secondary) {
+  background: linear-gradient(135deg, var(--brand-accent) 0%, var(--brand-accent-dark) 100%) !important;
+  border-color: transparent !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.p-button.p-button-outlined {
+  background: var(--surface-card) !important;
+  border-color: var(--surface-border) !important;
+  color: var(--text-secondary) !important;
+}
+
+.p-button.p-button-text {
+  color: var(--text-secondary) !important;
+  min-height: var(--control-height-sm) !important;
+}
+
+/* Table / toolbar icon buttons stay compact */
+.p-datatable .p-button,
+.warehouse-actions .p-button,
+.page-header__actions .p-button:not(:only-child),
+.action-bar .p-button:not(:only-child) {
+  width: auto !important;
+  min-width: unset !important;
+}
+
+/* ─── Inputs & selects ─── */
+.p-inputtext,
+.p-password input,
+.p-dropdown .p-dropdown-label,
+.p-dropdown .p-inputtext,
+.p-calendar .p-inputtext,
+.p-multiselect .p-multiselect-label,
+.p-inputtextarea,
+.p-inputnumber-input,
+.p-autocomplete .p-inputtext {
+  font-size: var(--control-font) !important;
+  min-height: var(--control-height) !important;
+  padding: 0.5rem 0.75rem !important;
+  line-height: 1.4 !important;
+}
+
+.p-inputtext.p-inputtext-sm,
+.p-dropdown.p-inputtext-sm {
+  min-height: var(--control-height-sm) !important;
+  font-size: var(--control-font-sm) !important;
+  padding: 0.375rem 0.625rem !important;
+}
+
+.p-inputtext,
+.p-password input,
+.p-dropdown,
+.p-calendar .p-inputtext,
+.p-multiselect,
+.p-inputtextarea,
+.p-inputnumber,
+.p-inputnumber-input,
+.p-autocomplete {
+  background: var(--surface-card) !important;
+  border-color: var(--surface-border) !important;
+  border-radius: var(--control-radius) !important;
+  color: var(--text-primary) !important;
+  width: 100%;
+  max-width: 100%;
+}
+
+.p-password,
+.p-calendar,
+.p-dropdown,
+.p-multiselect,
+.p-inputnumber,
+.p-autocomplete {
+  width: 100%;
+  max-width: 100%;
+}
+
+.p-dropdown,
+.p-multiselect {
+  min-height: var(--control-height) !important;
+}
+
+.p-dropdown .p-dropdown-trigger,
+.p-multiselect .p-multiselect-trigger {
+  width: 2.25rem !important;
+}
+
+.p-inputnumber-buttons-stacked .p-button,
+.p-inputnumber-buttons-horizontal .p-button {
+  min-height: var(--control-height-sm) !important;
+  width: auto !important;
+}
+
+.p-inputtext:focus,
+.p-dropdown:not(.p-disabled).p-focus,
+.p-multiselect:not(.p-disabled).p-focus,
+.p-inputnumber:not(.p-disabled).p-focus {
+  border-color: var(--brand-accent) !important;
+  box-shadow: var(--shadow-glow) !important;
+}
+
+/* ─── Cards ─── */
+.p-card {
+  background: var(--surface-card) !important;
+  border: 1px solid var(--surface-border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
+.p-card .p-card-header {
+  border-bottom: 1px solid var(--surface-border);
+  padding: var(--space-4) var(--space-5);
+  font-size: var(--text-md);
+}
+
+.p-card .p-card-body {
+  padding: var(--space-5);
+}
+
+/* ─── Data tables ─── */
+.p-datatable .p-datatable-thead > tr > th {
+  background: var(--surface-overlay) !important;
+  color: var(--text-secondary) !important;
+  font-weight: 600 !important;
+  font-size: var(--text-xs) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  border-color: var(--surface-border) !important;
+  padding: 0.625rem 0.875rem !important;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+  background: var(--surface-card) !important;
+  border-bottom: 1px solid var(--surface-border) !important;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+  background: var(--surface-hover) !important;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  border-color: transparent !important;
+  padding: 0.625rem 0.875rem !important;
+  color: var(--text-primary) !important;
+  font-size: var(--text-sm) !important;
+  vertical-align: middle;
+}
+
+.p-datatable.p-datatable-sm .p-datatable-thead > tr > th,
+.p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
+  padding: 0.5rem 0.75rem !important;
+  font-size: var(--text-sm) !important;
+}
+
+.p-datatable-wrapper {
+  max-width: 100%;
+}
+
+.p-paginator {
+  font-size: var(--text-sm) !important;
+  padding: 0.5rem 0.75rem !important;
+}
+
+.p-paginator .p-paginator-element {
+  min-width: var(--control-height-sm) !important;
+  min-height: var(--control-height-sm) !important;
+}
+
+/* ─── Tags & badges ─── */
+.p-tag {
+  border-radius: 20px !important;
+  font-size: var(--text-xs) !important;
+  font-weight: 600 !important;
+  padding: 0.2rem 0.55rem !important;
+}
+
+.p-tag.p-tag-success { background: var(--color-success-bg) !important; color: var(--color-success) !important; }
+.p-tag.p-tag-warning { background: var(--color-warning-bg) !important; color: var(--color-warning) !important; }
+.p-tag.p-tag-danger { background: var(--color-danger-bg) !important; color: var(--color-danger) !important; }
+.p-tag.p-tag-info { background: var(--color-info-bg) !important; color: var(--color-info) !important; }
+
+/* ─── Dialogs ─── */
+.p-dialog {
+  border-radius: var(--radius-xl) !important;
+  border: 1px solid var(--surface-border) !important;
+  box-shadow: var(--shadow-lg) !important;
+  max-width: calc(100vw - 1.5rem) !important;
+}
+
+.p-dialog .p-dialog-header {
+  background: var(--surface-overlay) !important;
+  border-bottom: 1px solid var(--surface-border) !important;
+  padding: var(--space-4) var(--space-5) !important;
+  font-size: var(--text-lg) !important;
+}
+
+.p-dialog .p-dialog-header .p-dialog-title {
+  font-size: var(--text-lg) !important;
+  font-weight: 700 !important;
+}
+
+.p-dialog .p-dialog-content {
+  padding: var(--space-5) !important;
+  font-size: var(--text-base) !important;
+}
+
+.p-dialog .p-dialog-footer {
+  padding: var(--space-4) var(--space-5) !important;
+  gap: var(--space-2) !important;
+}
+
+/* ─── Tabs ─── */
+.p-tabview .p-tabview-nav {
+  background: transparent !important;
+  border-color: var(--surface-border) !important;
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.p-tabview .p-tabview-nav::-webkit-scrollbar {
+  display: none;
+}
+
+.p-tabview .p-tabview-nav li .p-tabview-nav-link {
+  background: transparent !important;
+  color: var(--text-secondary) !important;
+  border-color: transparent !important;
+  min-height: var(--control-height) !important;
+  padding: 0.625rem 1rem !important;
+  font-size: var(--text-sm) !important;
+  font-weight: 600 !important;
+  white-space: nowrap;
+}
+
+.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  color: var(--brand-accent) !important;
+  border-color: var(--brand-accent) !important;
+}
+
+.p-tabview .p-tabview-panels {
+  padding: var(--space-4) 0 !important;
+}
+
+/* ─── Steps, messages, progress ─── */
+.p-steps .p-steps-title {
+  font-size: var(--text-xs) !important;
+}
+
+.p-message {
+  font-size: var(--text-sm) !important;
+}
+
+.p-message .p-message-text {
+  font-size: var(--text-sm) !important;
+}
+
+.p-progressbar {
+  border-radius: 20px !important;
+  background: var(--surface-border) !important;
+  height: 6px !important;
+}
+
+.p-progressbar .p-progressbar-value {
+  background: linear-gradient(90deg, var(--brand-accent), var(--brand-accent-light)) !important;
+}
+
+/* ─── Toast & confirm ─── */
+.p-toast .p-toast-message {
+  font-size: var(--text-sm) !important;
+}
+
+.p-confirm-dialog .p-dialog-content {
+  font-size: var(--text-base) !important;
+}
+
+body[dir='rtl'] .p-inputtext {
+  text-align: right;
+}
+
+/* Stack primary actions on narrow screens only in defined layouts */
+@media (max-width: 640px) {
+  .page-header__actions,
+  .form-actions,
+  .dialog-actions,
+  .wms-dialog-footer,
+  .setup-wizard__footer-main {
+    width: 100%;
+  }
+
+  .page-header__actions > .p-button:not(.p-button-text):not(.p-button-icon-only),
+  .form-actions > .p-button:not(.p-button-text):not(.p-button-icon-only),
+  .dialog-actions > .p-button:not(.p-button-text):not(.p-button-icon-only),
+  .wms-dialog-footer > .p-button:not(.p-button-text):not(.p-button-icon-only),
+  .setup-wizard__footer-main > .p-button:not(.p-button-text):not(.p-button-icon-only) {
+    flex: 1 1 auto;
+    min-width: min(100%, 10rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .p-dialog {
+    width: calc(100vw - 1rem) !important;
+    margin: 0.5rem;
+  }
+
+  .p-dialog .p-dialog-header,
+  .p-dialog .p-dialog-content,
+  .p-dialog .p-dialog-footer {
+    padding-inline: var(--space-4) !important;
+  }
+
+  .p-tabview .p-tabview-panels {
+    padding: var(--space-3) 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .p-datatable .p-datatable-tbody > tr > td {
+    padding: 0.5rem 0.625rem !important;
+    font-size: var(--text-xs) !important;
+  }
+
+  .p-paginator {
+    justify-content: center !important;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+}

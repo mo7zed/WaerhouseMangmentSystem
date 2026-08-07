@@ -1,1 +1,141 @@
-/* You can add global styles to this file, and also import other style files */
+/* TACHYON WMS — Global styles (light theme) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700;800&display=swap');
+
+@import 'primeng/resources/themes/lara-light-blue/theme.css';
+@import 'primeng/resources/primeng.css';
+@import 'primeicons/primeicons.css';
+@import 'primeflex/primeflex.css';
+
+@import './styles/tokens';
+@import './styles/base';
+@import './styles/primeng';
+@import './styles/layout';
+@import './styles/ui';
+@import './styles/settings';
+@import './styles/shell';
+@import './styles/animations';
+
+.user-menu-panel {
+    width: 340px;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--surface-border);
+    box-shadow: 0 12px 35px rgba(0,0,0,.15);
+}
+
+.user-menu-panel .p-overlaypanel-content{
+    padding:0;
+}
+
+/* Header */
+
+.user-menu-header{
+    display:flex;
+    align-items:center;
+    gap:1rem;
+    padding:1.25rem;
+    background:linear-gradient(135deg,#2563eb,#3b82f6);
+    color:white;
+}
+
+.user-menu-header .large{
+    width:58px;
+    height:58px;
+    border-radius:50%;
+    background:rgba(255,255,255,.18);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:22px;
+    font-weight:bold;
+}
+
+.user-details{
+    display:flex;
+    flex-direction:column;
+}
+
+.user-details .user-name{
+    font-weight:600;
+    font-size:16px;
+}
+
+.user-details .user-role{
+    font-size:13px;
+    opacity:.85;
+}
+
+/* body */
+
+.user-menu-items{
+    padding:.75rem;
+}
+
+.user-menu-item{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:14px;
+    border:none;
+    background:transparent;
+    border-radius:12px;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.user-menu-item:hover{
+    background:#f8fafc;
+}
+
+.menu-icon{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.menu-icon i{
+    font-size:18px;
+}
+
+.profile{
+    background:#DBEAFE;
+    color:#2563EB;
+}
+
+.password{
+    background:#FEF3C7;
+    color:#D97706;
+}
+
+.logout{
+    background:#FEE2E2;
+    color:#DC2626;
+}
+
+.menu-content{
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+}
+
+.menu-content span{
+    font-weight:600;
+}
+
+.menu-content small{
+    color:#64748B;
+}
+
+.menu-divider{
+    height:1px;
+    background:#E2E8F0;
+    margin:.5rem 0;
+}
+
+.user-menu-item.logout:hover{
+    background:#FEF2F2;
+}
