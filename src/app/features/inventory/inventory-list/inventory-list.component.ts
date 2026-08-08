@@ -14,6 +14,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { SkeletonModule } from 'primeng/skeleton';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { CatalogItemsService } from '../catalog-items.service';
 import { InventoryService } from '../inventory.service';
 import { InventoryItem } from '../../../core/models/inventory.model';
 import {
@@ -623,6 +624,7 @@ import {
   ],
 })
 export class InventoryListComponent implements OnInit {
+  private catalogItemsService = inject(CatalogItemsService);
   private invService = inject(InventoryService);
   private confirmService = inject(ConfirmationService);
   private messageService = inject(MessageService);
@@ -675,8 +677,8 @@ export class InventoryListComponent implements OnInit {
 
   loadItems(page = 1): void {
     this.loading.set(true);
-    this.invService
-      .getItems({
+    this.catalogItemsService
+      .getCatalogItems({
         page,
         limit: 15,
         search: this.searchQuery || undefined,
@@ -745,8 +747,8 @@ export class InventoryListComponent implements OnInit {
   saveItem(): void {
     this.saving.set(true);
     const obs = this.editingItem
-      ? this.invService.updateItem(this.editingItem.id, this.formData)
-      : this.invService.createItem(this.formData);
+      ? this.catalogItemsService.update(this.editingItem.id, this.catalogItemsService.toUpdateDto(this.formData))
+      : this.catalogItemsService.create(this.catalogItemsService.toCreateDto(this.formData));
 
     obs.subscribe(() => {
       this.saving.set(false);
@@ -792,12 +794,12 @@ export class InventoryListComponent implements OnInit {
       header: 'Confirm Delete',
       icon: 'pi pi-trash',
       accept: () => {
-        this.invService.deleteItem(item.id).subscribe(() => {
+        this.catalogItemsService.deactivate(item.id).subscribe(() => {
           this.loadItems();
           this.messageService.add({
             severity: 'success',
             summary: 'Deleted',
-            detail: 'Item removed.',
+            detail: 'Item deactivated.',
           });
         });
       },

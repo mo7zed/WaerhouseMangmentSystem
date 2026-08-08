@@ -7,6 +7,7 @@ import { ToastModule } from 'primeng/toast';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { TranslateService } from '@ngx-translate/core';
 import { applyDocumentLanguage } from '../../core/i18n/translate.initializer';
+import { LayoutService } from '../../core/services/layout.service';
 
 @Component({
   selector: 'app-layout',
@@ -22,6 +23,12 @@ import { applyDocumentLanguage } from '../../core/i18n/translate.initializer';
   template: `
     <div class="wms-layout" [dir]="isRTL() ? 'rtl' : 'ltr'">
       <app-sidebar></app-sidebar>
+      <button
+        class="mobile-nav-backdrop"
+        *ngIf="mobileMenuOpen()"
+        (click)="closeMobileMenu()"
+        aria-label="Close navigation menu"
+      ></button>
       <div class="wms-content">
         <app-topbar></app-topbar>
         <main class="wms-main">
@@ -35,8 +42,14 @@ import { applyDocumentLanguage } from '../../core/i18n/translate.initializer';
 })
 export class AppLayoutComponent implements OnInit {
   private translate = inject(TranslateService);
+  private layout = inject(LayoutService);
 
   isRTL = () => this.translate.currentLang === 'ar';
+  mobileMenuOpen = this.layout.mobileMenuOpen;
+
+  closeMobileMenu(): void {
+    this.layout.closeMobileMenu();
+  }
 
   ngOnInit() {
     this.translate.onLangChange.subscribe((event) => {

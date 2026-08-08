@@ -20,7 +20,7 @@ interface NavItem {
   standalone: true,
   imports: [CommonModule, RouterLink, RouterLinkActive, TranslateModule, PanelMenuModule, TooltipModule],
   template: `
-    <aside class="wms-sidebar" [class.collapsed]="isCollapsed()">
+    <aside class="wms-sidebar" [class.collapsed]="isCollapsed()" [class.mobile-open]="mobileMenuOpen()">
       <!-- Logo -->
       <div class="sidebar-logo">
         <div class="logo-icon">
@@ -108,6 +108,7 @@ export class SidebarComponent implements OnInit {
   private layout = inject(LayoutService);
 
   isCollapsed = this.layout.sidebarCollapsed;
+  mobileMenuOpen = this.layout.mobileMenuOpen;
   private expandedItems = signal<Set<string>>(new Set());
 
   navItems: NavItem[] = [
@@ -178,6 +179,10 @@ export class SidebarComponent implements OnInit {
   }
 
   toggleSidebar(): void {
+    if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+      this.layout.closeMobileMenu();
+      return;
+    }
     this.layout.toggleSidebar();
   }
 

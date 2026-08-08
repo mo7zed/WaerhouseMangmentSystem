@@ -236,6 +236,14 @@ body[dir='rtl'] .wms-topbar {
   gap: var(--space-3);
 }
 
+.mobile-menu-btn {
+  display: none !important;
+}
+
+.mobile-nav-backdrop {
+  display: none;
+}
+
 .topbar-btn {
   display: flex;
   align-items: center;
@@ -345,15 +353,72 @@ body[dir='rtl'] .wms-topbar {
     display: none;
   }
 
+  .wms-sidebar.mobile-open {
+    display: flex;
+    width: var(--sidebar-width);
+    z-index: 201;
+  }
+
+  .wms-sidebar.mobile-open .logo-text,
+  .wms-sidebar.mobile-open .nav-section {
+    display: block !important;
+  }
+
+  .wms-sidebar.mobile-open .nav-label,
+  .wms-sidebar.mobile-open .nav-badge {
+    display: inline !important;
+  }
+
+  .wms-sidebar.mobile-open .nav-sub-list {
+    display: block !important;
+  }
+
+  .wms-sidebar.mobile-open .sidebar-logo,
+  .wms-sidebar.mobile-open .nav-item {
+    justify-content: flex-start;
+  }
+
+  .mobile-nav-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    border: 0;
+    background: rgba(15, 23, 42, 0.45);
+    z-index: 200;
+  }
+
+  app-topbar {
+    display: block;
+    position: sticky;
+    top: 0;
+    z-index: 101;
+  }
+
   .wms-topbar,
   body[dir='rtl'] .wms-topbar {
-    left: 0;
-    right: 0;
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    width: 100%;
+    box-sizing: border-box;
     padding-inline: 0.75rem;
   }
 
+  .wms-main {
+    padding-top: var(--content-padding);
+  }
+
   .topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     min-width: 0;
+  }
+
+  .mobile-menu-btn {
+    display: inline-flex !important;
   }
 
   .topbar-brand {

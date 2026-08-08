@@ -9,6 +9,7 @@ import { BadgeModule } from 'primeng/badge';
 import { AvatarModule } from 'primeng/avatar';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../../core/auth/auth.service';
+import { LayoutService } from '../../core/services/layout.service';
 
 @Component({
   selector: 'app-topbar',
@@ -21,6 +22,15 @@ import { AuthService } from '../../core/auth/auth.service';
     <header class="wms-topbar">
       <!-- Left: Breadcrumb / Page Title -->
       <div class="topbar-left">
+        <button
+          pRipple
+          class="topbar-btn mobile-menu-btn"
+          (click)="toggleMobileMenu()"
+          aria-label="Open navigation menu"
+          id="mobile-menu-btn"
+        >
+          <i class="pi pi-bars"></i>
+        </button>
         <div class="topbar-brand">
           <span class="topbar-greeting">{{ greeting() }},</span>
           <span class="topbar-username">{{ user()?.name }}</span>
@@ -255,6 +265,7 @@ export class TopbarComponent implements OnInit {
   private translate = inject(TranslateService);
   private router = inject(Router);
   private messageService = inject(MessageService);
+  private layout = inject(LayoutService);
 
   user = this.authService.currentUser;
   currentLang = signal<string>('en');
@@ -298,6 +309,10 @@ export class TopbarComponent implements OnInit {
       }
 
     });
+  }
+
+  toggleMobileMenu(): void {
+    this.layout.toggleMobileMenu();
   }
 
   markAllRead(): void {
