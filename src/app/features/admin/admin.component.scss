@@ -1,0 +1,17 @@
+.user-name { font-weight: 600; color: var(--text-primary); }
+    .muted-text { color: var(--text-muted); font-size: 0.82rem; }
+    .table-actions, .role-list, .permission-list { display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; }
+    .permissions-text { color: var(--text-primary); font-size: 0.78rem; }
+    .compact-icon-btn { min-width: 2rem; width: 2rem; height: 2rem; }
+    .dialog-form { display: flex; flex-direction: column; gap: 1rem; padding: 0.5rem 0; }
+    .permission-preview, .access-section { display: flex; flex-direction: column; gap: 0.5rem; }
+    .preview-title { color: var(--text-secondary); font-size: 0.78rem; font-weight: 700; text-transform: uppercase; }
+    .access-user-summary, .assigned-role {
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+      padding: 0.75rem; border: 1px solid var(--surface-border); border-radius: var(--radius-md);
+      background: var(--surface-overlay);
+    }
+    .assigned-role-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .health-stack { display: flex; flex-direction: column; gap: 1.5rem; }
+    code { font-size: 0.75rem; }
+    .details-cell { max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

@@ -1,0 +1,4 @@
+.confirm-row { display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0;border-bottom:1px solid var(--surface-border);font-size:0.85rem; }
+    .confirm-row span { color:var(--text-secondary); }
+    .form-field { display:flex;flex-direction:column;gap:0.4rem; }
+    .form-field label { font-size:0.8rem;font-weight:600;color:var(--text-secondary); }

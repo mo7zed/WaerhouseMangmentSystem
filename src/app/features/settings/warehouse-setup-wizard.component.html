@@ -1,0 +1,201 @@
+<div class="setup-wizard">
+      <div class="setup-wizard__hero">
+        <div class="setup-wizard__icon" aria-hidden="true">
+          <i class="pi pi-building"></i>
+        </div>
+        <div class="setup-wizard__meta">
+          <h3>{{ warehouse.name }}</h3>
+          <p>
+            <span class="code-text">{{ warehouse.code }}</span>
+            Â· {{ 'SETTINGS.SETUP_INTRO_SHORT' | translate }}
+          </p>
+          <div class="setup-wizard__progress">
+            <div class="setup-wizard__progress-label">
+              <span>{{ 'SETTINGS.SETUP_PROGRESS' | translate }}</span>
+              <span>{{ progressPercent() }}%</span>
+            </div>
+            <p-progressBar [value]="progressPercent()" [showValue]="false" styleClass="h-1rem"></p-progressBar>
+          </div>
+        </div>
+        <p-tag
+          [value]="warehouse.operationalStatus"
+          [severity]="statusSeverity(warehouse.operationalStatus)"
+          styleClass="flex-shrink-0" />
+      </div>
+
+      <div class="setup-steps">
+        <p-steps [model]="steps" [activeIndex]="activeStep()" [readonly]="true"></p-steps>
+      </div>
+
+      @if (warehouse.operationalStatus === 'Active') {
+        <p-message severity="warn" [text]="'SETTINGS.SETUP_ACTIVE_BLOCKED' | translate" styleClass="w-full"></p-message>
+      }
+
+      @if (lastApiError()) {
+        <div class="setup-error-banner" role="alert">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>{{ lastApiError() }}</span>
+        </div>
+      }
+
+      <div class="setup-step-panel">
+        <h4 class="setup-step-panel__heading">{{ currentStepTitle() }}</h4>
+
+        @switch (activeStep()) {
+          @case (0) {
+            <form [formGroup]="zoneForm">
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="zone-code">{{ 'SETTINGS.ZONE_CODE' | translate }} *</label>
+                  <input pInputText id="zone-code" formControlName="code" />
+                </div>
+                <div class="form-field">
+                  <label for="zone-name">{{ 'SETTINGS.ZONE_NAME' | translate }} *</label>
+                  <input pInputText id="zone-name" formControlName="name" />
+                </div>
+              </div>
+              <div class="form-subsection">
+                <p class="form-subsection__title">{{ 'SETTINGS.ZONE_CLASSIFICATION' | translate }}</p>
+                <div class="form-row">
+                  <div class="form-field">
+                    <label for="zone-type">{{ 'SETTINGS.ZONE_TYPE' | translate }} *</label>
+                    <p-dropdown
+                      id="zone-type"
+                      formControlName="zoneType"
+                      [options]="zoneTypeOptions"
+                      optionLabel="label"
+                      optionValue="value"
+                      [placeholder]="'SETTINGS.SELECT_ZONE_TYPE' | translate"
+                      styleClass="w-full"
+                      appendTo="body"></p-dropdown>
+                  </div>
+                  <div class="form-field">
+                    <label for="storage-type">{{ 'SETTINGS.STORAGE_TYPE' | translate }} *</label>
+                    <p-dropdown
+                      id="storage-type"
+                      formControlName="storageType"
+                      [options]="storageTypeOptions"
+                      optionLabel="label"
+                      optionValue="value"
+                      [placeholder]="'SETTINGS.SELECT_STORAGE_TYPE' | translate"
+                      styleClass="w-full"
+                      appendTo="body"></p-dropdown>
+                  </div>
+                </div>
+              </div>
+              <div class="form-subsection">
+                <p class="form-subsection__title">{{ 'SETTINGS.ZONE_ENVIRONMENT' | translate }}</p>
+                <div class="form-row">
+                  <div class="form-field">
+                    <label>{{ 'SETTINGS.TEMP_MIN' | translate }}</label>
+                    <p-inputNumber formControlName="tempMinCelsius" [showButtons]="true" styleClass="w-full"></p-inputNumber>
+                  </div>
+                  <div class="form-field">
+                    <label>{{ 'SETTINGS.TEMP_MAX' | translate }}</label>
+                    <p-inputNumber formControlName="tempMaxCelsius" [showButtons]="true" styleClass="w-full"></p-inputNumber>
+                  </div>
+                  <div class="form-field">
+                    <label>{{ 'SETTINGS.HUMIDITY_MIN' | translate }}</label>
+                    <p-inputNumber formControlName="humidityMinPercent" [showButtons]="true" styleClass="w-full"></p-inputNumber>
+                  </div>
+                  <div class="form-field">
+                    <label>{{ 'SETTINGS.HUMIDITY_MAX' | translate }}</label>
+                    <p-inputNumber formControlName="humidityMaxPercent" [showButtons]="true" styleClass="w-full"></p-inputNumber>
+                  </div>
+                </div>
+                @if (zoneForm.errors?.['rangeInvalid']) {
+                  <small class="field-error">{{ 'SETTINGS.RANGE_INVALID' | translate }}</small>
+                }
+              </div>
+            </form>
+          }
+          @case (1) {
+            <p class="setup-step-hint">{{ 'SETTINGS.AISLE_HINT' | translate }}</p>
+            <form [formGroup]="aisleForm">
+              <div class="form-field" style="max-width: 320px;">
+                <label for="aisle-code">{{ 'SETTINGS.AISLE_CODE' | translate }} *</label>
+                <input pInputText id="aisle-code" formControlName="code" />
+              </div>
+            </form>
+            @if (ctx().zoneId) {
+              <div class="setup-ctx-chips">
+                <span class="setup-ctx-chip">Zone: {{ ctx().zoneId }}</span>
+              </div>
+            }
+          }
+          @case (2) {
+            <p class="setup-step-hint">{{ 'SETTINGS.RACK_HINT' | translate }}</p>
+            <form [formGroup]="rackForm">
+              <div class="form-field" style="max-width: 320px;">
+                <label for="rack-code">{{ 'SETTINGS.RACK_CODE' | translate }} *</label>
+                <input pInputText id="rack-code" formControlName="code" />
+              </div>
+            </form>
+            @if (ctx().aisleId) {
+              <div class="setup-ctx-chips">
+                <span class="setup-ctx-chip">Zone: {{ ctx().zoneId }}</span>
+                <span class="setup-ctx-chip">Aisle: {{ ctx().aisleId }}</span>
+              </div>
+            }
+          }
+          @case (3) {
+            <p class="setup-step-hint">{{ 'SETTINGS.SHELF_HINT' | translate }}</p>
+            <form [formGroup]="shelfForm">
+              <div class="form-row">
+                <div class="form-field">
+                  <label for="shelf-code">{{ 'SETTINGS.SHELF_CODE' | translate }} *</label>
+                  <input pInputText id="shelf-code" formControlName="code" />
+                </div>
+                <div class="form-field">
+                  <label for="shelf-level">{{ 'SETTINGS.SHELF_LEVEL' | translate }} *</label>
+                  <p-inputNumber id="shelf-level" formControlName="level" [showButtons]="true" [min]="1" styleClass="w-full"></p-inputNumber>
+                </div>
+              </div>
+            </form>
+            @if (ctx().rackId) {
+              <div class="setup-ctx-chips">
+                <span class="setup-ctx-chip">Rack: {{ ctx().rackId }}</span>
+              </div>
+            }
+          }
+        }
+
+        @if (lastCreatedSummary()) {
+          <div class="setup-success-banner">
+            <i class="pi pi-check-circle"></i>
+            <span>{{ lastCreatedSummary() }}</span>
+          </div>
+        }
+      </div>
+
+      <footer class="setup-wizard__footer">
+        <button
+          pButton
+          type="button"
+          class="p-button-outlined p-button-sm"
+          [label]="'COMMON.CANCEL' | translate"
+          (click)="onCancel()"
+          [disabled]="saving()"></button>
+        <div class="setup-wizard__footer-main">
+          @if (activeStep() > 0) {
+            <button
+              pButton
+              type="button"
+              class="p-button-secondary p-button-sm"
+              icon="pi pi-arrow-left"
+              [label]="'COMMON.BACK' | translate"
+              (click)="goBack()"
+              [disabled]="saving()"></button>
+          }
+          <button
+            pButton
+            type="button"
+            class="p-button-success p-button-sm"
+            [label]="activeStep() === 3 ? ('SETTINGS.FINISH_SETUP' | translate) : ('COMMON.NEXT' | translate)"
+            [icon]="saving() ? 'pi pi-spin pi-spinner' : 'pi pi-arrow-right'"
+            iconPos="right"
+            (click)="onNext()"
+            [disabled]="saving() || !canSubmitStep()"></button>
+        </div>
+      </footer>
+    </div>

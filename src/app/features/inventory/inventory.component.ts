@@ -15,47 +15,7 @@ import { ButtonModule } from 'primeng/button';
     TabViewModule,
     ButtonModule,
   ],
-  template: `
-    <div class="inventory-page">
-      <h1>{{ 'NAV.INVENTORY' | translate }}</h1>
-
-      <p-tabView>
-        <p-tabPanel [header]="'INVENTORY.STOCK_OVERVIEW' | translate">
-          <div class="tab-content">
-            <p>Stock overview content will be rendered here</p>
-          </div>
-        </p-tabPanel>
-
-        <p-tabPanel [header]="'INVENTORY.ITEM_MASTER' | translate">
-          <div class="tab-content">
-            <p>Item master content will be rendered here</p>
-          </div>
-        </p-tabPanel>
-
-        <p-tabPanel [header]="'INVENTORY.BIN_MANAGEMENT' | translate">
-          <div class="tab-content">
-            <p>Bin management content will be rendered here</p>
-          </div>
-        </p-tabPanel>
-
-        <p-tabPanel [header]="'INVENTORY.CYCLE_COUNTING' | translate">
-          <div class="tab-content">
-            <p>Cycle counting content will be rendered here</p>
-          </div>
-        </p-tabPanel>
-      </p-tabView>
-    </div>
-  `,
-  styles: [
-    `
-      .inventory-page {
-        padding: 1rem;
-      }
-
-      .tab-content {
-        padding: 1.5rem;
-      }
-    `,
-  ],
+  templateUrl: './inventory.component.html',
+  styleUrl: './inventory.component.scss',
 })
 export class InventoryComponent {}

@@ -5,11 +5,8 @@ import { CommonModule } from '@angular/common';
   selector: 'app-page-shell',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="page-shell animate-fade-in" [class]="extraClass">
-      <ng-content></ng-content>
-    </div>
-  `,
+  templateUrl: './page-shell.component.html',
+  styleUrl: './page-shell.component.scss',
 })
 export class PageShellComponent {
   @Input() extraClass = '';

@@ -1,0 +1,107 @@
+.sku-code {
+        font-family: ui-monospace, monospace;
+        font-size: 0.78rem;
+        color: var(--brand-accent-dark);
+        background: var(--color-info-bg);
+        padding: 0.15rem 0.4rem;
+        border-radius: 4px;
+      }
+      .item-name-cell {
+        display: flex;
+        flex-direction: column;
+      }
+      .item-name {
+        font-weight: 500;
+        font-size: 0.85rem;
+      }
+      .item-barcode {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+      }
+
+      .category-tag {
+        background: var(--surface-overlay);
+        padding: 0.2rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.75rem;
+        color: var(--text-secondary);
+      }
+
+      .bin-cell {
+        display: flex;
+        flex-direction: column;
+      }
+      .zone-label {
+        font-size: 0.7rem;
+        color: var(--text-muted);
+      }
+      .bin-code {
+        font-size: 0.82rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+      }
+
+      .qty-cell {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+      }
+      .qty-value {
+        font-weight: 700;
+        font-size: 0.9rem;
+      }
+      .qty-value.low {
+        color: var(--color-warning);
+      }
+      .qty-value.out {
+        color: var(--color-danger);
+      }
+      .qty-reserved {
+        font-size: 0.68rem;
+        color: var(--text-muted);
+      }
+
+      .strategy-badge {
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 0.15rem 0.5rem;
+        border-radius: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+      }
+      .strategy-badge.fifo {
+        background: var(--color-info-bg);
+        color: var(--color-info);
+      }
+      .strategy-badge.fefo {
+        background: var(--color-success-bg);
+        color: var(--color-success);
+      }
+      .strategy-badge.lifo {
+        background: var(--color-warning-bg);
+        color: var(--color-warning);
+      }
+
+      .date-text {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+      }
+
+      .filters-bar {
+        overflow: visible;
+      }
+
+      .form-field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+      .form-field label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+      }
+      .form-field input,
+      .form-field .p-dropdown {
+        width: 100%;
+      }

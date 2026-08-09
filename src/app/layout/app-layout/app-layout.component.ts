@@ -20,25 +20,8 @@ import { LayoutService } from '../../core/services/layout.service';
     ToastModule,
     ConfirmDialogModule,
   ],
-  template: `
-    <div class="wms-layout" [dir]="isRTL() ? 'rtl' : 'ltr'">
-      <app-sidebar></app-sidebar>
-      <button
-        class="mobile-nav-backdrop"
-        *ngIf="mobileMenuOpen()"
-        (click)="closeMobileMenu()"
-        aria-label="Close navigation menu"
-      ></button>
-      <div class="wms-content">
-        <app-topbar></app-topbar>
-        <main class="wms-main">
-          <router-outlet></router-outlet>
-        </main>
-      </div>
-    </div>
-    <p-toast position="top-right" id="global-toast"></p-toast>
-    <p-confirmDialog></p-confirmDialog>
-  `,
+  templateUrl: './app-layout.component.html',
+  styleUrl: './app-layout.component.scss',
 })
 export class AppLayoutComponent implements OnInit {
   private translate = inject(TranslateService);

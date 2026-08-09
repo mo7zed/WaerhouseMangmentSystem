@@ -1,0 +1,117 @@
+<div class="login-page">
+      <!-- Background Particles -->
+      <div class="login-bg">
+        <div class="bg-orb orb-1"></div>
+        <div class="bg-orb orb-2"></div>
+        <div class="bg-orb orb-3"></div>
+        <div class="bg-grid"></div>
+      </div>
+
+      <!-- Login Card -->
+      <div class="login-container animate-fade-in-up">
+        <!-- Logo -->
+        <div class="login-logo">
+          <div class="logo-icon-lg">
+            <i class="pi pi-box"></i>
+          </div>
+          <div>
+            <h1 class="brand-name">TACHYON</h1>
+            <p class="brand-sub">Warehouse Management System</p>
+          </div>
+        </div>
+
+        <!-- Language Switcher -->
+        <div class="lang-switcher">
+          <button
+            class="lang-btn"
+            [class.active]="currentLang() === 'en'"
+            (click)="setLang('en')"
+            id="lang-en-btn"
+          >&#x1F1EC;&#x1F1E7; EN</button>
+          <button
+            class="lang-btn"
+            [class.active]="currentLang() === 'ar'"
+            (click)="setLang('ar')"
+            id="lang-ar-btn"
+          >&#x1F1F8;&#x1F1E6; AR</button>
+        </div>
+
+        <!-- Heading -->
+        <div class="login-heading">
+          <h2>{{ 'AUTH.WELCOME' | translate }}</h2>
+          <p>{{ 'AUTH.WELCOME_SUB' | translate }}</p>
+        </div>
+
+        <!-- Error Message -->
+        <div class="login-error" *ngIf="errorMsg()">
+          <i class="pi pi-exclamation-triangle"></i>
+          <span>{{ errorMsg() }}</span>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form" id="login-form">
+          <!-- Username or email -->
+          <div class="form-group">
+            <label for="username-input">{{ 'AUTH.USERNAME_OR_EMAIL' | translate }}</label>
+            <div class="input-wrapper">
+              <input
+                id="username-input"
+                pInputText
+                type="text"
+                formControlName="usernameOrEmail"
+                [placeholder]="'AUTH.USERNAME_OR_EMAIL' | translate"
+                class="w-full"
+                autocomplete="username"
+              />
+            </div>
+            <span class="field-error" *ngIf="loginForm.get('usernameOrEmail')?.invalid && loginForm.get('usernameOrEmail')?.touched">
+              {{ 'AUTH.USERNAME_OR_EMAIL_REQUIRED' | translate }}
+            </span>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <label for="password-input">{{ 'AUTH.PASSWORD' | translate }}</label>
+            <div class="input-wrapper">
+              <p-password
+                id="password-input"
+                formControlName="password"
+                [placeholder]="'AUTH.PASSWORD' | translate"
+                [feedback]="false"
+                [toggleMask]="true"
+                styleClass="w-full"
+                inputStyleClass="w-full"
+              ></p-password>
+            </div>
+            <span class="field-error" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+              {{ 'AUTH.PASSWORD_REQUIRED' | translate }}
+            </span>
+          </div>
+
+          <!-- Remember + Forgot -->
+          <div class="form-row">
+            <label class="remember-label">
+              <p-checkbox formControlName="remember" [binary]="true" inputId="remember-checkbox"></p-checkbox>
+              <span>{{ 'AUTH.REMEMBER_ME' | translate }}</span>
+            </label>
+            <a routerLink="/forgot-password" class="forgot-link" id="forgot-password-link">
+              {{ 'AUTH.FORGOT_PASSWORD' | translate }}
+            </a>
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            pButton
+            type="submit"
+            [label]="loading() ? '' : ('AUTH.LOGIN' | translate)"
+            [loading]="loading()"
+            [disabled]="loginForm.invalid || loading()"
+            class="login-submit-btn w-full"
+            id="login-submit-btn"
+          ></button>
+        </form>
+
+        <!-- Footer -->
+        <p class="login-footer">`r`n          &copy; {{ year }} Tachyon WMS &middot; All rights reserved`r`n        </p>
+      </div>
+    </div>

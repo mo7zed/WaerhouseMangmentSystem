@@ -1,6 +1,4 @@
-import { Injectable, inject, signal, computed } from '@angular/core';
-import { interval } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Injectable } from '@angular/core';
 import { KpiCard, ChartData, Alert, ActivityLog } from '../../core/models/shared.model';
 
 @Injectable({ providedIn: 'root' })

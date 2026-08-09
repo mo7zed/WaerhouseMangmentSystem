@@ -53,7 +53,7 @@ export class ReportsService {
     return of(reports[type] ?? reports['valuation']).pipe(delay(400));
   }
 
-  getOrderReport(from?: string, to?: string): Observable<ReportData> {
+  getOrderReport(_from?: string, _to?: string): Observable<ReportData> {
     return of({
       title: 'Order Fulfillment Report',
       summary: { fulfillmentRate: '96.4%', avgCycleTime: '4.2 hrs', slaCompliance: '94.1%' },

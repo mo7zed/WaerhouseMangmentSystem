@@ -3,10 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-filters-bar',
   standalone: true,
-  template: `
-    <div class="filters-bar">
-      <ng-content></ng-content>
-    </div>
-  `,
+  templateUrl: './filters-bar.component.html',
+  styleUrl: './filters-bar.component.scss',
 })
 export class FiltersBarComponent {}

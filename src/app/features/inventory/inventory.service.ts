@@ -1,4 +1,4 @@
-import { Injectable, inject, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { InventoryItem, BinNode, InventoryFilter, CycleCount, ReplenishmentAlert, StockTransfer } from '../../core/models/inventory.model';
 import { PagedResponse } from '../../core/models/shared.model';
 import { of, Observable } from 'rxjs';
@@ -123,7 +123,7 @@ export class InventoryService {
     ).pipe(delay(200));
   }
 
-  transferStock(transfer: StockTransfer): Observable<any> {
+  transferStock(_transfer: StockTransfer): Observable<any> {
     return of({ success: true }).pipe(delay(400));
   }
 }
