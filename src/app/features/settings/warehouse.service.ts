@@ -99,7 +99,7 @@ export class WarehouseService {
           observer.next();
           observer.complete();
         },
-        error: (err) => {
+        error: (err) => { 
           this.error.set(err.message);
           observer.error(err);
         },

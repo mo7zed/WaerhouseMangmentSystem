@@ -4,7 +4,7 @@ import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, finalize, shareReplay, tap } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { AuthResponse, JwtPayload, LoginRequest, RefreshTokenRequest, UserProfile } from '../models/auth.model';
 import { SKIP_AUTH, SKIP_REFRESH } from '../interceptors/auth-http-context';
@@ -22,6 +22,7 @@ export class AuthService {
   private router = inject(Router);
   private platformId = inject(PLATFORM_ID);
   private apiUrl = environment.apiUrl;
+  private refreshRequest$: Observable<AuthResponse> | null = null;
 
   private get storage(): Storage | null {
     return isPlatformBrowser(this.platformId) ? localStorage : null;
@@ -51,13 +52,20 @@ export class AuthService {
       return throwError(() => new Error('Your session has expired. Please log in again.'));
     }
 
-    const body: RefreshTokenRequest = { refreshToken };
+    // A page can issue multiple API calls at once. Reuse the in-flight refresh so
+    // a rotated refresh token is never submitted more than once.
+    if (!this.refreshRequest$) {
+      const body: RefreshTokenRequest = { refreshToken };
+      this.refreshRequest$ = this.http.post<AuthResponse>(`${this.apiUrl}/auth/refresh`, body, {
+        context: new HttpContext().set(SKIP_AUTH, true).set(SKIP_REFRESH, true),
+      }).pipe(
+        tap(res => this.handleAuthSuccess(res)),
+        finalize(() => this.refreshRequest$ = null),
+        shareReplay({ bufferSize: 1, refCount: false }),
+      );
+    }
 
-    return this.http.post<AuthResponse>(`${this.apiUrl}/auth/refresh`, body, {
-      context: new HttpContext().set(SKIP_AUTH, true).set(SKIP_REFRESH, true),
-    }).pipe(
-      tap(res => this.handleAuthSuccess(res)),
-    );
+    return this.refreshRequest$;
   }
 
   logout(): void {
@@ -102,6 +110,11 @@ export class AuthService {
 
   getCurrentUser(): UserProfile | null {
     return this._currentUser();
+  }
+
+  isAccessTokenExpired(): boolean {
+    const token = this.getToken();
+    return !token || this.isJwtExpired(token);
   }
 
   hasPermission(permission: string): boolean {

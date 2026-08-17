@@ -1,3 +1,17 @@
-.labor-page {
-        padding: 1rem;
-      }
+.labor-page { padding: 1rem; }
+.page-heading, .heading-actions, .actions { display: flex; align-items: center; }
+.page-heading { justify-content: space-between; gap: 1rem; margin-bottom: 1.25rem; }
+.page-heading h1 { margin: 0; }
+.page-heading p { margin: .3rem 0 0; color: var(--text-color-secondary); }
+.heading-actions { gap: .5rem; flex-wrap: wrap; }
+.summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; margin-bottom: 1rem; }
+.summary-grid :host ::ng-deep .p-card-body { padding: 1rem; }
+.summary-grid span, td small { display: block; color: var(--text-color-secondary); }
+.summary-grid strong { display: block; font-size: 1.75rem; margin-top: .35rem; }
+.actions { gap: .25rem; }
+.empty-state { padding: 2rem; text-align: center; color: var(--text-color-secondary); }
+.assignment-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.assignment-form label { display: grid; gap: .45rem; font-weight: 600; }
+.assignment-form .full { grid-column: 1 / -1; }
+.assignment-form input, .assignment-form :host ::ng-deep .p-dropdown { width: 100%; }
+@media (max-width: 720px) { .page-heading { align-items: flex-start; flex-direction: column; } .summary-grid { grid-template-columns: repeat(2, 1fr); } .assignment-form { grid-template-columns: 1fr; } .assignment-form .full { grid-column: auto; } }

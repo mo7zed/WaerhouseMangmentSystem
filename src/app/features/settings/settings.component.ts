@@ -52,7 +52,6 @@ import {
     FiltersBarComponent,
     SectionCardComponent,
   ],
-  providers: [MessageService, ConfirmationService],
   templateUrl: './settings.component.html',
   styleUrl: './settings.component.scss',
 })
@@ -198,6 +197,13 @@ export class SettingsComponent implements OnInit {
       error: (err) => {
         this.activatingId.set(null);
         console.error('Error activating warehouse:', err);
+
+        // The global error handler shows the API's domain message for 422 responses.
+        // Avoid adding a second, generic notification over it.
+        if ((err as { status?: number })?.status === 422) {
+          return;
+        }
+
         const apiMsg =
           (err as { error?: { message?: string; title?: string } })?.error?.message ||
           (err as { message?: string })?.message;

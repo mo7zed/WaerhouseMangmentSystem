@@ -48,15 +48,42 @@ export interface StockTransfer {
 export interface CycleCount {
   id: string;
   warehouseId: string;
-  zoneId?: string;
-  assignedTo: string;
-  assignedToName: string;
-  status: 'pending' | 'in_progress' | 'completed' | 'discrepancy';
-  itemsTotal: number;
-  itemsCounted: number;
-  discrepancies: number;
-  scheduledDate: Date;
-  completedDate?: Date;
+  targetLocations: string[];
+  targetItems: string[];
+  status: string;
+  varianceThreshold: number;
+  scheduledDate: string;
+  completedDate: string | null;
+  initiatedBy: string;
+  countTasks: CycleCountTask[];
+}
+
+export interface CycleCountTask {
+  id?: string;
+  itemId?: string;
+  locationId?: string;
+  expectedQuantity?: number;
+  countedQuantity?: number;
+  status?: string;
+  [key: string]: unknown;
+}
+
+export interface CreateCycleCountDto {
+  warehouseId: string;
+  targetLocationIds: string[];
+  targetItemIds: string[];
+  varianceThreshold: number;
+  scheduledDate: string;
+  initiatedBy: string;
+}
+
+/** The count-result endpoint accepts one or more task results. */
+export interface SubmitCycleCountResultsDto {
+  results: Array<{
+    countTaskId: string;
+    countedQuantity: number;
+    [key: string]: unknown;
+  }>;
 }
 
 export interface LotTracking {

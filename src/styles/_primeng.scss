@@ -155,6 +155,73 @@ body[dir='rtl'] .p-component {
   box-shadow: var(--shadow-glow) !important;
 }
 
+/* ─── Fields with icons ───
+ * The shared input padding above intentionally normalizes every control, but
+ * PrimeNG's icon variants need additional room so the value never sits under
+ * a search, clear, or trailing action icon. Keep this here as a global rule
+ * so every page gets the same alignment.
+ */
+.p-input-icon-left,
+.p-input-icon-right {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.p-input-icon-left > .p-inputtext {
+  padding-inline-start: 2.5rem !important;
+}
+
+.p-input-icon-right > .p-inputtext {
+  padding-inline-end: 2.5rem !important;
+}
+
+.p-input-icon-left > i,
+.p-input-icon-left > .p-icon-wrapper,
+.p-input-icon-right > i,
+.p-input-icon-right > .p-icon-wrapper {
+  top: 50%;
+  margin-top: 0;
+  transform: translateY(-50%);
+  line-height: 1;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.p-input-icon-left > i,
+.p-input-icon-left > .p-icon-wrapper {
+  inset-inline-start: 0.875rem;
+}
+
+.p-input-icon-right > i,
+.p-input-icon-right > .p-icon-wrapper {
+  inset-inline-end: 0.875rem;
+}
+
+/* PrimeNG password toggle icons are interactive, unlike decorative input icons. */
+.p-password.p-input-icon-right > .p-password-input {
+  padding-inline-end: 2.5rem !important;
+}
+
+.p-password.p-input-icon-right > .p-icon-wrapper {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Reserve room for a clear icon and the dropdown trigger. */
+.p-dropdown.p-clearable .p-dropdown-label,
+.p-multiselect.p-multiselect-clearable .p-multiselect-label {
+  padding-inline-end: 4.25rem !important;
+}
+
+.p-dropdown .p-dropdown-clear-icon,
+.p-multiselect .p-multiselect-clear-icon {
+  top: 50%;
+  margin-top: 0;
+  transform: translateY(-50%);
+  line-height: 1;
+}
+
 /* ─── Cards ─── */
 .p-card {
   background: var(--surface-card) !important;

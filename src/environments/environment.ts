@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://warehousemanagementsystem-production-4a33.up.railway.app/api',
+  apiUrl: 'https://warehousemanagementsystem-production-5f10.up.railway.app/api',
   tokenRefreshInterval: 300000, // 5 minutes
   appName: 'TACHYON WMS',
   defaultLanguage: 'en',

@@ -1,17 +1,67 @@
 <div class="labor-page">
+  <div class="page-heading">
+    <div>
       <h1>{{ 'NAV.LABOR' | translate }}</h1>
-      <p-tabView styleClass="settings-tabs">
-        <p-tabPanel [header]="'LABOR.TASK_ASSIGNMENT' | translate">
-          <p>Task assignment here</p>
-        </p-tabPanel>
-        <p-tabPanel [header]="'LABOR.OPERATOR_PERFORMANCE' | translate">
-          <p>Operator performance here</p>
-        </p-tabPanel>
-        <p-tabPanel [header]="'LABOR.WORKLOAD' | translate">
-          <p>Workload balancing here</p>
-        </p-tabPanel>
-        <p-tabPanel [header]="'LABOR.SHIFTS' | translate">
-          <p>Shift overview here</p>
-        </p-tabPanel>
-      </p-tabView>
+      <p>Manage warehouse work assignments and their execution.</p>
     </div>
+    <div class="heading-actions">
+      <button pButton type="button" label="Balance workload" icon="pi pi-sitemap" class="p-button-outlined" (click)="balanceWorkload()" [disabled]="!warehouseId"></button>
+      <button pButton type="button" label="New assignment" icon="pi pi-plus" (click)="openCreate()"></button>
+    </div>
+  </div>
+
+  <p-tabView styleClass="settings-tabs">
+    <p-tabPanel [header]="'LABOR.TASK_ASSIGNMENT' | translate">
+      <div class="summary-grid">
+        <p-card><span>Total assignments</span><strong>{{ summary.total }}</strong></p-card>
+        <p-card><span>Pending</span><strong>{{ summary.pending }}</strong></p-card>
+        <p-card><span>Active</span><strong>{{ summary.active }}</strong></p-card>
+        <p-card><span>Completed</span><strong>{{ summary.completed }}</strong></p-card>
+      </div>
+
+      <p-table [value]="assignments()" [loading]="loading()" responsiveLayout="scroll" styleClass="p-datatable-sm">
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Task</th><th>Priority</th><th>Status</th><th>Zone</th><th>Operator</th><th>Due by</th><th>Actions</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-assignment>
+          <tr>
+            <td><strong>{{ assignment.taskType }}</strong><small>{{ assignment.sourceTaskId }}</small></td>
+            <td><p-tag [value]="assignment.priority" [severity]="prioritySeverity(assignment.priority)"></p-tag></td>
+            <td><p-tag [value]="assignment.status" [severity]="statusSeverity(assignment.status)"></p-tag></td>
+            <td>{{ zoneName(assignment.zoneId) }}</td>
+            <td>{{ operatorName(assignment.assignedOperatorId) }}</td>
+            <td>{{ assignment.dueBy ? (assignment.dueBy | date:'medium') : '—' }}</td>
+            <td class="actions">
+              <button *ngIf="assignment.status === 'Assigned'" pButton type="button" label="Accept" class="p-button-text p-button-sm" (click)="runAction(assignment, 'accept')"></button>
+              <button *ngIf="assignment.status === 'Accepted'" pButton type="button" label="Start" class="p-button-text p-button-sm" (click)="runAction(assignment, 'start')"></button>
+              <button *ngIf="assignment.status === 'InProgress'" pButton type="button" label="Complete" class="p-button-text p-button-sm" (click)="runAction(assignment, 'complete')"></button>
+              <button *ngIf="!['Completed', 'Cancelled', 'Failed'].includes(assignment.status)" pButton type="button" icon="pi pi-times" class="p-button-text p-button-danger p-button-sm" aria-label="Cancel assignment" (click)="runAction(assignment, 'cancel')"></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage"><tr><td colspan="7" class="empty-state">No work assignments for this warehouse.</td></tr></ng-template>
+      </p-table>
+    </p-tabPanel>
+    <p-tabPanel [header]="'LABOR.OPERATOR_PERFORMANCE' | translate"><p>Operator performance will appear here when performance metrics are available.</p></p-tabPanel>
+    <p-tabPanel [header]="'LABOR.WORKLOAD' | translate"><p>Use “Balance workload” to distribute eligible assignments.</p></p-tabPanel>
+    <p-tabPanel [header]="'LABOR.SHIFTS' | translate"><p>Shift overview here</p></p-tabPanel>
+  </p-tabView>
+</div>
+
+<p-dialog header="Create work assignment" [(visible)]="showCreateDialog" [modal]="true" [style]="{ width: 'min(40rem, 95vw)' }">
+  <div class="assignment-form">
+    <label>Task type <p-dropdown [options]="taskTypes" [(ngModel)]="newAssignment.taskType"></p-dropdown></label>
+    <label>Priority <p-dropdown [options]="priorities" [(ngModel)]="newAssignment.priority"></p-dropdown></label>
+    <label class="full">Source task ID <input pInputText [(ngModel)]="newAssignment.sourceTaskId" placeholder="Task UUID" /></label>
+    <label>Zone <p-dropdown [options]="zoneOptions()" optionLabel="label" optionValue="value" [(ngModel)]="newAssignment.zoneId" [showClear]="true" placeholder="Select a zone"></p-dropdown></label>
+    <label>Due by <input pInputText type="datetime-local" [(ngModel)]="newAssignment.dueBy" /></label>
+    <label class="full">Required skills <input pInputText [(ngModel)]="newAssignment.requiredSkills" placeholder="Comma-separated, e.g. Forklift, Hazmat" /></label>
+    <label class="full">Notes <input pInputText [(ngModel)]="newAssignment.notes" /></label>
+  </div>
+  <ng-template pTemplate="footer">
+    <button pButton type="button" label="Cancel" class="p-button-text" (click)="showCreateDialog.set(false)"></button>
+    <button pButton type="button" label="Create assignment" [loading]="creating()" (click)="createAssignment()"></button>
+  </ng-template>
+</p-dialog>

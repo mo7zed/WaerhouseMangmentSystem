@@ -1,5 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
+import { catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { SKIP_AUTH } from './auth-http-context';
 
@@ -11,13 +12,31 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const token = authService.getToken();
 
-  if (token) {
-    req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  if (!token) {
+    return next(req);
   }
 
-  return next(req);
+  // Refresh before sending the request. This makes writes (such as creating a
+  // warehouse) use the new token instead of relying on an API-specific 401/403
+  // response for an already-expired access token.
+  if (authService.isAccessTokenExpired()) {
+    return authService.refreshAccessToken().pipe(
+      switchMap(() => next(withAuthorization(req, authService.getToken()))),
+      catchError(error => {
+        authService.clearSession();
+        return throwError(() => error);
+      }),
+    );
+  }
+
+  return next(withAuthorization(req, token));
 };
+
+function withAuthorization<T extends { clone: (update: { setHeaders: Record<string, string> }) => T }>(
+  request: T,
+  token: string | null,
+): T {
+  return token
+    ? request.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
+    : request;
+}

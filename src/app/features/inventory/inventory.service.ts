@@ -1,11 +1,13 @@
-import { Injectable } from '@angular/core';
-import { InventoryItem, BinNode, InventoryFilter, CycleCount, ReplenishmentAlert, StockTransfer } from '../../core/models/inventory.model';
+import { Injectable, inject } from '@angular/core';
+import { InventoryItem, BinNode, InventoryFilter, CycleCount, CreateCycleCountDto, ReplenishmentAlert, StockTransfer, SubmitCycleCountResultsDto } from '../../core/models/inventory.model';
+import { BaseApiService } from '../../core/services/base-api.service';
 import { PagedResponse } from '../../core/models/shared.model';
 import { of, Observable } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class InventoryService {
+  private api = inject(BaseApiService);
 
   private mockItems: InventoryItem[] = Array.from({ length: 50 }, (_, i) => ({
     id: `item-${i + 1}`,
@@ -100,12 +102,32 @@ export class InventoryService {
     ] as BinNode[]).pipe(delay(200));
   }
 
-  getCycleCounts(): Observable<CycleCount[]> {
-    return of([
-      { id: 'cc-1', warehouseId: 'wh-001', zoneId: 'zone-A', assignedTo: 'op-1', assignedToName: 'Mohammed Al-Otaibi', status: 'in_progress' as const, itemsTotal: 120, itemsCounted: 87, discrepancies: 3, scheduledDate: new Date() },
-      { id: 'cc-2', warehouseId: 'wh-001', zoneId: 'zone-B', assignedTo: 'op-2', assignedToName: 'Fatima Al-Zahrani', status: 'pending' as const, itemsTotal: 95, itemsCounted: 0, discrepancies: 0, scheduledDate: new Date(Date.now() + 86400000) },
-      { id: 'cc-3', warehouseId: 'wh-001', zoneId: 'zone-C', assignedTo: 'op-3', assignedToName: 'Ahmed Al-Rashid', status: 'completed' as const, itemsTotal: 80, itemsCounted: 80, discrepancies: 1, scheduledDate: new Date(Date.now() - 86400000), completedDate: new Date() },
-    ] satisfies CycleCount[]).pipe(delay(200));
+  getCycleCounts(warehouseId: string): Observable<CycleCount[]> {
+    return this.api.get<CycleCount[]>('cycle-counts', { warehouseId });
+  }
+
+  getCycleCountById(id: string): Observable<CycleCount> {
+    return this.api.get<CycleCount>(`cycle-counts/${id}`);
+  }
+
+  createCycleCount(body: CreateCycleCountDto): Observable<CycleCount> {
+    return this.api.post<CycleCount>('cycle-counts', body);
+  }
+
+  releaseCycleCount(id: string): Observable<CycleCount> {
+    return this.api.post<CycleCount>(`cycle-counts/${id}/release`, {});
+  }
+
+  submitCycleCountResults(id: string, body: SubmitCycleCountResultsDto): Observable<CycleCount> {
+    return this.api.post<CycleCount>(`cycle-counts/${id}/count-results`, body);
+  }
+
+  reconcileCycleCount(id: string): Observable<CycleCount> {
+    return this.api.post<CycleCount>(`cycle-counts/${id}/reconcile`, {});
+  }
+
+  completeCycleCount(id: string): Observable<CycleCount> {
+    return this.api.post<CycleCount>(`cycle-counts/${id}/complete`, {});
   }
 
   getReplenishmentAlerts(): Observable<ReplenishmentAlert[]> {

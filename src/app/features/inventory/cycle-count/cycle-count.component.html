@@ -1,67 +1,100 @@
 <div class="cycle-count-page animate-fade-in">
-      <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
-        <div>
-          <h1 class="page-title">Cycle Counting</h1>
-          <p class="page-subtitle">Manage and track warehouse cycle counts</p>
-        </div>
-        <button pButton icon="pi pi-plus" label="New Count" class="p-button-sm" id="new-cycle-count-btn" (click)="startNewCount()"></button>
-      </div>
+  <div class="page-header" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem;">
+    <div>
+      <h1 class="page-title">Cycle Counting</h1>
+      <p class="page-subtitle">Manage and track warehouse cycle counts</p>
+    </div>
+    <button pButton icon="pi pi-plus" label="New Count" class="p-button-sm" id="new-cycle-count-btn" (click)="startNewCount()"></button>
+  </div>
 
-      <!-- Summary Cards -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem;" class="stagger-children">
-        <div class="kpi-card info animate-fade-in-up" *ngFor="let s of summaryCards">
-          <div class="kpi-icon"><i class="pi" [class]="s.icon"></i></div>
-          <div class="kpi-value">{{ s.value }}</div>
-          <div class="kpi-label">{{ s.label }}</div>
-        </div>
-      </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem;" class="stagger-children">
+    <div class="kpi-card info animate-fade-in-up" *ngFor="let s of summaryCards">
+      <div class="kpi-icon"><i class="pi" [class]="s.icon"></i></div>
+      <div class="kpi-value">{{ s.value }}</div>
+      <div class="kpi-label">{{ s.label }}</div>
+    </div>
+  </div>
 
-      <div class="section-card">
-        <p-table [value]="counts()" [loading]="loading()" styleClass="p-datatable-sm" id="cycle-count-table">
-          <ng-template pTemplate="header">
-            <tr>
-              <th>Assigned To</th>
-              <th>Zone</th>
-              <th>Scheduled</th>
-              <th>Progress</th>
-              <th>Status</th>
-              <th>Discrepancies</th>
-              <th>Actions</th>
-            </tr>
-          </ng-template>
-          <ng-template pTemplate="body" let-count>
-            <tr>
-              <td>
-                <div style="display:flex;align-items:center;gap:0.5rem;">
-                  <p-avatar [label]="count.assignedToName.charAt(0)" shape="circle" size="normal" styleClass="operator-avatar"></p-avatar>
-                  <span style="font-size:0.85rem;">{{ count.assignedToName }}</span>
-                </div>
-              </td>
-              <td><span style="font-weight:500;">{{ count.zoneId }}</span></td>
-              <td><span style="font-size:0.8rem;color:var(--text-muted);">{{ count.scheduledDate | date:'MMM d, yyyy' }}</span></td>
-              <td style="min-width:180px;">
-                <div style="display:flex;align-items:center;gap:0.5rem;">
-                  <p-progressBar [value]="getProgress(count)" [style]="{'height':'6px','flex':'1'}" [showValue]="false"></p-progressBar>
-                  <span style="font-size:0.75rem;min-width:50px;">{{ count.itemsCounted }}/{{ count.itemsTotal }}</span>
-                </div>
-              </td>
-              <td>
-                <p-tag [value]="count.status | titlecase"
-                  [severity]="count.status === 'completed' ? 'success' : count.status === 'in_progress' ? 'info' : count.status === 'discrepancy' ? 'danger' : 'warning'">
-                </p-tag>
-              </td>
-              <td>
-                <span *ngIf="count.discrepancies > 0" style="color:var(--color-danger);font-weight:700;">{{ count.discrepancies }}</span>
-                <span *ngIf="count.discrepancies === 0" style="color:var(--color-success);">âœ“ None</span>
-              </td>
-              <td>
-                <div style="display:flex;gap:0.35rem;">
-                  <button pButton icon="pi pi-play" class="p-button-text p-button-sm" *ngIf="count.status === 'pending'" label="Start" (click)="startCount(count)"></button>
-                  <button pButton icon="pi pi-eye" class="p-button-text p-button-sm" label="View" (click)="viewCount(count)"></button>
-                </div>
-              </td>
-            </tr>
-          </ng-template>
-        </p-table>
+  <div class="section-card">
+    <p-table [value]="counts()" [loading]="loading()" styleClass="p-datatable-sm" id="cycle-count-table">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>Initiated By</th><th>Locations</th><th>Scheduled</th><th>Progress</th><th>Status</th><th>Threshold</th><th>Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-count>
+        <tr>
+          <td>
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+              <p-avatar [label]="count.initiatedBy.slice(0, 1).toUpperCase()" shape="circle" size="normal" styleClass="operator-avatar"></p-avatar>
+              <span style="font-size:0.85rem;">{{ count.initiatedBy }}</span>
+            </div>
+          </td>
+          <td><span style="font-weight:500;">{{ count.targetLocations.length }} location(s)</span></td>
+          <td><span style="font-size:0.8rem;color:var(--text-muted);">{{ count.scheduledDate | date:'MMM d, yyyy' }}</span></td>
+          <td style="min-width:180px;">
+            <div style="display:flex;align-items:center;gap:0.5rem;">
+              <p-progressBar [value]="getProgress(count)" [style]="{'height':'6px','flex':'1'}" [showValue]="false"></p-progressBar>
+              <span style="font-size:0.75rem;min-width:50px;">{{ count.countTasks.length }} tasks</span>
+            </div>
+          </td>
+          <td><p-tag [value]="count.status" [severity]="getStatusSeverity(count.status)"></p-tag></td>
+          <td>{{ count.varianceThreshold }}</td>
+          <td>
+            <div style="display:flex;gap:0.35rem;">
+              <button pButton icon="pi pi-play" class="p-button-text p-button-sm" *ngIf="count.status.toLowerCase() === 'planned'" label="Release" (click)="startCount(count)"></button>
+              <button pButton icon="pi pi-eye" class="p-button-text p-button-sm" label="View" (click)="viewCount(count)"></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <p-dialog header="New Cycle Count" [modal]="true" [visible]="showCreateDialog()" (visibleChange)="showCreateDialog.set($event)" [style]="{ width: '32rem' }">
+    <div style="display:grid;gap:1rem;">
+      <div>
+        <label for="target-locations" style="display:block;margin-bottom:0.35rem;">Storage locations</label>
+        <p-multiSelect
+          inputId="target-locations"
+          [options]="storageLocations()"
+          [(ngModel)]="newCount.targetLocationIds"
+          optionLabel="binCode"
+          optionValue="id"
+          [filter]="true"
+          filterBy="binCode,zoneId"
+          [loading]="optionsLoading()"
+          placeholder="Select storage locations"
+          styleClass="w-full">
+        </p-multiSelect>
+      </div>
+      <div>
+        <label for="target-items" style="display:block;margin-bottom:0.35rem;">Items</label>
+        <p-multiSelect
+          inputId="target-items"
+          [options]="catalogItems()"
+          [(ngModel)]="newCount.targetItemIds"
+          optionLabel="name"
+          optionValue="id"
+          [filter]="true"
+          filterBy="name,sku"
+          [loading]="optionsLoading()"
+          placeholder="Select items"
+          styleClass="w-full">
+        </p-multiSelect>
+      </div>
+      <div>
+        <label for="scheduled-date" style="display:block;margin-bottom:0.35rem;">Scheduled date</label>
+        <input id="scheduled-date" type="datetime-local" [(ngModel)]="newCount.scheduledDate" style="width:100%;">
+      </div>
+      <div>
+        <label for="variance-threshold" style="display:block;margin-bottom:0.35rem;">Variance threshold</label>
+        <p-inputNumber inputId="variance-threshold" [(ngModel)]="newCount.varianceThreshold" [min]="0" styleClass="w-full"></p-inputNumber>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:0.5rem;">
+        <button pButton label="Cancel" class="p-button-text" (click)="showCreateDialog.set(false)"></button>
+        <button pButton label="Create Count" [loading]="submitting()" (click)="createCount()"></button>
       </div>
     </div>
+  </p-dialog>
+</div>
